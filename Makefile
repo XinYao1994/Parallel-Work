@@ -16,7 +16,8 @@ mpi: mpi.c
 	$(MPICC) -o mpi mpi.c $(CFLAGS)
 
 cuda: cuda.cu
-  $(CUDACC) 
+	$(CUDACC) -o cuda cuda.cu $(CFLAGS)
+	time $(CUDACC) -run ./cuda
 
 clean:
 	-rm -f pthread openmp mpi cuda
