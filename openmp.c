@@ -80,7 +80,6 @@ int main(int argc, char **argv){
   allocMm(&b, lb, lc, 1);
   allocMm(&c, la, lc, 0);
   int i,j;
-  clock_t start, finish;
   openmp_multmatrix();
   return 0;
 }
