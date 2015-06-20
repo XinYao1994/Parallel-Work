@@ -1,6 +1,7 @@
 #compiler
 CC = gcc
 MPICC = mpicc
+MPIRUN = mpirun
 CUDACC = nvcc
 CFLAGS = -g -O3 
 #begin to choose
@@ -14,10 +15,11 @@ openmp: openmp.c
 
 mpi: mpi.c
 	$(MPICC) -o mpi mpi.c $(CFLAGS)
+	$(MPIRUN) -np 16 ./mpi
 
 cuda: cuda.cu
-	$(CUDACC) -o cuda cuda.cu $(CFLAGS)
-	time $(CUDACC) -run ./cuda
+	$(CUDACC) -o cuda cuda.cu -lcudart $(CFLAGS) -G
+	$(CUDACC) -run ./cuda
 
 clean:
 	-rm -f pthread openmp mpi cuda
