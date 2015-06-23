@@ -225,6 +225,8 @@ int main(int argc, char **argv){
     init_con(Pid, lb);
     count(Pid, lc, la, lb);
     MPI_Send(buf, xstep*ystep*sizeof(int), MPI_INT, 0, 0, MPI_COMM_WORLD);
+    MPI_Finalize();
+    return 0;
   }
   MPI_Finalize();
   return 0;
