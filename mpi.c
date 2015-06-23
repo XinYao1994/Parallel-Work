@@ -79,13 +79,13 @@ void init_con(int id, int same){
     //send
     for(i=bb;i<ee;i++){
         if(i==id) continue;
-        MPI_Send(bufa, sizeof(bufa), MPI_INT, i, 1, MPI_COMM_WORLD);//send a
-        MPI_Send(bufb, sizeof(bufb), MPI_INT, i, 2, MPI_COMM_WORLD);//send b
+        MPI_Send(bufa, sizeof(int)*ystep*same, MPI_INT, i, 1, MPI_COMM_WORLD);//send a
+        MPI_Send(bufb, sizeof(int)*xstep*same, MPI_INT, i, 2, MPI_COMM_WORLD);//send b
     }
     //Recv
     for(i=bb;i<ee;i++){
-        MPI_Recv(bufa, sizeof(bufa), MPI_INT, i, 1, MPI_COMM_WORLD, &status);
-        MPI_Recv(bufb, sizeof(bufb), MPI_INT, i, 2, MPI_COMM_WORLD, &status);
+        MPI_Recv(bufa, sizeof(int)*ystep*same, MPI_INT, i, 1, MPI_COMM_WORLD, &status);
+        MPI_Recv(bufb, sizeof(int)*xstep*same, MPI_INT, i, 2, MPI_COMM_WORLD, &status);
         //fill in
         //xstep ystep not change
         con = 0;
@@ -111,8 +111,8 @@ void init_con(int id, int same){
     int *buffa = (int *)malloc(sizeof(bufa));
     int *buffb = (int *)malloc(sizeof(bufb));
     for(i=bb;i<ee;i++){
-        MPI_Recv(buffa, sizeof(buffa), MPI_INT, i, 1, MPI_COMM_WORLD, &status);
-        MPI_Recv(buffb, sizeof(buffb), MPI_INT, i, 2, MPI_COMM_WORLD, &status);
+        MPI_Recv(buffa, sizeof(int)*ystep*same, MPI_INT, i, 1, MPI_COMM_WORLD, &status);
+        MPI_Recv(buffb, sizeof(int)*xstep*same, MPI_INT, i, 2, MPI_COMM_WORLD, &status);
         //fill in
         //xstep ystep not change
         con = 0;
@@ -135,8 +135,8 @@ void init_con(int id, int same){
     //send
     for(i=bb;i<ee;i++){
         if(i==id) continue;
-        MPI_Send(bufa, sizeof(bufa), MPI_INT, i, 1, MPI_COMM_WORLD);//send a
-        MPI_Send(bufb, sizeof(bufb), MPI_INT, i, 2, MPI_COMM_WORLD);//send b
+        MPI_Send(bufa, sizeof(int)*ystep*same, MPI_INT, i, 1, MPI_COMM_WORLD);//send a
+        MPI_Send(bufb, sizeof(int)*xstep*same, MPI_INT, i, 2, MPI_COMM_WORLD);//send b
     }
   }
 }
