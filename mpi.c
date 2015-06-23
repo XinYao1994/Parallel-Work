@@ -79,8 +79,11 @@ void init_con(int id, int same){
   for(i=bb;i<ee;i++){
      //i send
      if(i==id){
-        MPI_Send(bufa, sizeof(int)*ystep*same, MPI_INT, i, 1, MPI_COMM_WORLD);//send a
-        MPI_Send(bufb, sizeof(int)*xstep*same, MPI_INT, i, 2, MPI_COMM_WORLD);//send b
+        for(j=bb;j<ee;j++){
+          if(j==id) continue;
+          MPI_Send(bufa, sizeof(int)*ystep*same, MPI_INT, j, 1, MPI_COMM_WORLD);//send a
+          MPI_Send(bufb, sizeof(int)*xstep*same, MPI_INT, j, 2, MPI_COMM_WORLD);//send b
+        }
      }
      else{
         MPI_Recv(buffa, sizeof(int)*ystep*same, MPI_INT, i, 1, MPI_COMM_WORLD, &status);
