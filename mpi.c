@@ -72,7 +72,7 @@ void init_Mm(int id, int x, int y, int same){
 //Recive  - even
 void init_con(int id, int same){
   int i,j,k;
-  posy = id%Wp;//get group
+  posy = id/Wp;//get group
   int bb = posy*Hp, ee = (posy+1)*Hp;
   int con;
   if(id%2){
