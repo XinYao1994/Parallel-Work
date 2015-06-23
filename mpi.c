@@ -11,7 +11,6 @@
 //use 4*4 = 16 pro
 int Wp = 4;
 int Hp = 4;
-
 typedef struct{
   int *m;
   int a,b;
@@ -74,49 +73,18 @@ void init_con(int id, int same){
   int i,j,k;
   posy = id/Wp;//get group
   int bb = posy*Hp, ee = (posy+1)*Hp;
-  int con;
-  if(id%2){
-    //send
-    for(i=bb;i<ee;i++){
-        if(i==id) continue;
+  int con;//send once recive k-1
+  int *buffa = (int *)malloc(sizeof(int)*ystep*same);
+  int *buffb = (int *)malloc(sizeof(int)*xstep*same);
+  for(i=bb;i<ee;i++){
+     //i send
+     if(i==id){
         MPI_Send(bufa, sizeof(int)*ystep*same, MPI_INT, i, 1, MPI_COMM_WORLD);//send a
         MPI_Send(bufb, sizeof(int)*xstep*same, MPI_INT, i, 2, MPI_COMM_WORLD);//send b
-    }
-    //Recv
-    for(i=bb;i<ee;i++){
-        if(i==id) continue;
-        MPI_Recv(bufa, sizeof(int)*ystep*same, MPI_INT, i, 1, MPI_COMM_WORLD, &status);
-        MPI_Recv(bufb, sizeof(int)*xstep*same, MPI_INT, i, 2, MPI_COMM_WORLD, &status);
-        //fill in
-        //xstep ystep not change
-        con = 0;
-        xB = i * xstep;
-        yB = i * ystep;
-        xE = (i+1)*xstep;
-        yE = (i+1)*ystep;
-        for(j=yB;j<yE;j++)
-          for(k=0;k<same;k++){
-            *(a->m+j*a->b+k) = *(bufa+con);
-            con++;
-          }
-        con = 0;
-        for(j=xB;j<xE;j++)
-          for(k=0;k<same;k++){
-            *(b->m+j*b->b+k) = *(bufb+con);
-            con++;
-          }
-    }
-  }
-  else{
-    //Recv
-    int *buffa = (int *)malloc(sizeof(int)*ystep*same);
-    int *buffb = (int *)malloc(sizeof(int)*xstep*same);
-    for(i=bb;i<ee;i++){
-        if(i==id) continue;
+     }
+     else{
         MPI_Recv(buffa, sizeof(int)*ystep*same, MPI_INT, i, 1, MPI_COMM_WORLD, &status);
         MPI_Recv(buffb, sizeof(int)*xstep*same, MPI_INT, i, 2, MPI_COMM_WORLD, &status);
-        //fill in
-        //xstep ystep not change
         con = 0;
         xB = i * xstep;
         yB = i * ystep;
@@ -133,13 +101,7 @@ void init_con(int id, int same){
             *(b->m+j*b->b+k) = *(buffb+con);
             con++;
           }
-    }
-    //send
-    for(i=bb;i<ee;i++){
-        if(i==id) continue;
-        MPI_Send(bufa, sizeof(int)*ystep*same, MPI_INT, i, 1, MPI_COMM_WORLD);//send a
-        MPI_Send(bufb, sizeof(int)*xstep*same, MPI_INT, i, 2, MPI_COMM_WORLD);//send b
-    }
+     }
   }
 }
 
