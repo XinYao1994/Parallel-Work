@@ -217,7 +217,7 @@ int main(int argc, char **argv){
     allocMm(&c, la, lc);
     int i;
     for(i=0;i<nPNum;i++){
-        Fill(i, lc, la, status);
+        Fill(i, lc, la, &status);
     }
   }
   else{
