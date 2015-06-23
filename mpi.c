@@ -109,8 +109,8 @@ void init_con(int id, int same){
   }
   else{
     //Recv
-    int *buffa = (int *)malloc(sizeof(bufa));
-    int *buffb = (int *)malloc(sizeof(bufb));
+    int *buffa = (int *)malloc(sizeof(int)*ystep*same);
+    int *buffb = (int *)malloc(sizeof(int)*xstep*same);
     for(i=bb;i<ee;i++){
         if(i==id) continue;
         MPI_Recv(buffa, sizeof(int)*ystep*same, MPI_INT, i, 1, MPI_COMM_WORLD, &status);
