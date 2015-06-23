@@ -15,7 +15,7 @@ openmp: openmp.c
 
 mpi: mpi.c
 	$(MPICC) -o mpi mpi.c $(CFLAGS)
-	$(MPIRUN) -np 16 ./mpi
+	#$(MPIRUN) -np 16 ./mpi
 
 cuda: cuda.cu
 	$(CUDACC) -o cuda cuda.cu -lcudart $(CFLAGS) -G
