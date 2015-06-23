@@ -28,6 +28,7 @@ int Myatoi(char *c){
 }
 
 Matrix *a,*b,*c;
+MPI_Status status;
 
 void allocMm(Matrix **m, int x,int y){
   *m = (Matrix *)malloc(sizeof(Matrix));
@@ -37,7 +38,7 @@ void allocMm(Matrix **m, int x,int y){
 }
 
 int posx, posy, xstep, ystep;
-int xB, xE, yB, YE;
+int xB, xE, yB, yE;
 int *buf, *bufa, *bufb;
 
 void init_Mm(int id, int x, int y, int same){
@@ -70,7 +71,7 @@ void init_Mm(int id, int x, int y, int same){
 //Send - oid
 //Recive  - even
 void init_con(int id, int same){
-  int i,j;
+  int i,j,k;
   posy = id%Wp;//get group
   int bb = posy*Hp, ee = (posy+1)*Hp;
   int con;
@@ -92,15 +93,15 @@ void init_con(int id, int same){
         yB = i * ystep;
         xE = (i+1)*xstep;
         yE = (i+1)*ystep;
-        for(i=yB;i<yE;i++)
+        for(j=yB;j<yE;j++)
           for(k=0;k<same;k++){
-            *(a->m+i*a->b+k) = *(bufa+con);
+            *(a->m+j*a->b+k) = *(bufa+con);
             con++;
           }
         con = 0;
-        for(i=xB;i<xE;i++)
+        for(j=xB;j<xE;j++)
           for(k=0;k<same;k++){
-            *(b->m+i*b->b+k) = *(bufb+con);
+            *(b->m+j*b->b+k) = *(bufb+con);
             con++;
           }
     }
@@ -119,15 +120,15 @@ void init_con(int id, int same){
         yB = i * ystep;
         xE = (i+1)*xstep;
         yE = (i+1)*ystep;
-        for(i=yB;i<yE;i++)
+        for(j=yB;j<yE;j++)
           for(k=0;k<same;k++){
-            *(a->m+i*a->b+k) = *(buffa+con);
+            *(a->m+j*a->b+k) = *(buffa+con);
             con++;
           }
         con = 0;
-        for(i=xB;i<xE;i++)
+        for(j=xB;j<xE;j++)
           for(k=0;k<same;k++){
-            *(b->m+i*b->b+k) = *(buffb+con);
+            *(b->m+j*b->b+k) = *(buffb+con);
             con++;
           }
     }
@@ -160,7 +161,7 @@ void Fill(int id, int x, int y, MPI_Status *status){
     }
 }
 
-void count(int id, int over){
+void count(int id, int x, int y, int over){
   int i,j,k,con = 0;
   posx = id%Wp;
   posy = id/Hp;
@@ -184,7 +185,6 @@ int nPNum, Pid;
 int main(int argc, char **argv){
   srand(time(0));
   int la, lb, lc;
-  MPI_Status status;
   MPI_Init(&argc, &argv);
   MPI_Comm_rank(MPI_COMM_WORLD,&Pid);
   MPI_Comm_size(MPI_COMM_WORLD,&nPNum);
@@ -212,8 +212,8 @@ int main(int argc, char **argv){
   allocMm(&b, lb, lc);
   if(Pid==0){
     init_Mm(Pid, lc, la, lb);
-    init_con(Pid);
-    count(Pid, lb);
+    init_con(Pid, lb);
+    count(Pid, lc, la, lb);
     allocMm(&c, la, lc);
     for(int i=0;i<nPNum;i++){
         fill(i, lc, la, status);
@@ -221,9 +221,9 @@ int main(int argc, char **argv){
   }
   else{
     init_Mm(Pid, lc, la, lb);
-    init_con(Pid);
-    count(Pid, lb);
-    MPI_send(buf, xlen*ylen*sizeof(int), MPI_INT, 0, 0, MPI_COMM_WORLD);
+    init_con(Pid, lb);
+    count(Pid, lc, la, lb);
+    MPI_send(buf, xstep*ystep*sizeof(int), MPI_INT, 0, 0, MPI_COMM_WORLD);
   }
   MPI_Finalize();
   return 0;
