@@ -84,6 +84,7 @@ void init_con(int id, int same){
     }
     //Recv
     for(i=bb;i<ee;i++){
+        if(i==id) continue;
         MPI_Recv(bufa, sizeof(int)*ystep*same, MPI_INT, i, 1, MPI_COMM_WORLD, &status);
         MPI_Recv(bufb, sizeof(int)*xstep*same, MPI_INT, i, 2, MPI_COMM_WORLD, &status);
         //fill in
@@ -111,6 +112,7 @@ void init_con(int id, int same){
     int *buffa = (int *)malloc(sizeof(bufa));
     int *buffb = (int *)malloc(sizeof(bufb));
     for(i=bb;i<ee;i++){
+        if(i==id) continue;
         MPI_Recv(buffa, sizeof(int)*ystep*same, MPI_INT, i, 1, MPI_COMM_WORLD, &status);
         MPI_Recv(buffb, sizeof(int)*xstep*same, MPI_INT, i, 2, MPI_COMM_WORLD, &status);
         //fill in
