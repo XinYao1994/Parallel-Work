@@ -79,8 +79,8 @@ void init_con(int id, int same){
     //send
     for(i=bb;i<ee;i++){
         if(i==id) continue;
-        MPI_send(bufa, sizeof(bufa), MPI_INT, i, 1, MPI_COMM_WORLD);//send a
-        MPI_send(bufb, sizeof(bufb), MPI_INT, i, 2, MPI_COMM_WORLD);//send b
+        MPI_Send(bufa, sizeof(bufa), MPI_INT, i, 1, MPI_COMM_WORLD);//send a
+        MPI_Send(bufb, sizeof(bufb), MPI_INT, i, 2, MPI_COMM_WORLD);//send b
     }
     //Recv
     for(i=bb;i<ee;i++){
@@ -135,8 +135,8 @@ void init_con(int id, int same){
     //send
     for(i=bb;i<ee;i++){
         if(i==id) continue;
-        MPI_send(bufa, sizeof(bufa), MPI_INT, i, 1, MPI_COMM_WORLD);//send a
-        MPI_send(bufb, sizeof(bufb), MPI_INT, i, 2, MPI_COMM_WORLD);//send b
+        MPI_Send(bufa, sizeof(bufa), MPI_INT, i, 1, MPI_COMM_WORLD);//send a
+        MPI_Send(bufb, sizeof(bufb), MPI_INT, i, 2, MPI_COMM_WORLD);//send b
     }
   }
 }
@@ -217,14 +217,14 @@ int main(int argc, char **argv){
     allocMm(&c, la, lc);
     int i;
     for(i=0;i<nPNum;i++){
-        fill(i, lc, la, status);
+        Fill(i, lc, la, status);
     }
   }
   else{
     init_Mm(Pid, lc, la, lb);
     init_con(Pid, lb);
     count(Pid, lc, la, lb);
-    MPI_send(buf, xstep*ystep*sizeof(int), MPI_INT, 0, 0, MPI_COMM_WORLD);
+    MPI_Send(buf, xstep*ystep*sizeof(int), MPI_INT, 0, 0, MPI_COMM_WORLD);
   }
   MPI_Finalize();
   return 0;
