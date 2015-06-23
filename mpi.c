@@ -9,8 +9,8 @@
 #define LC 1600
 #define num 50
 //use 4*4 = 16 pro
-#define Wp 4
-#define Hp 4
+int Wp = 4;
+int Hp = 4;
 
 typedef struct{
   int *m;
