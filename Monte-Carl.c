@@ -75,7 +75,7 @@ int main(int argc, char **argv){
             sum += bufa[i];
             all += bufb[i];
         } 
-        printf("the area of fun from [0,%d] is %.2f",BORD,(double)(sum)/(double)(all)*(double)(BORD*BROD));
+        printf("the area of fun from [0,%d] is %.2f",BORD,(double)(sum)/(double)(all)*(double)(BORD*BORD));
     }
     else{
         test(all/NumPro);
