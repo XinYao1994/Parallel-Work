@@ -5,7 +5,6 @@
 #define BORD 100
 #define CON 10000
 #define NumPro 16
-#define Ran(x) (rand()%((x))+1))
 
 int buf[NumPro];
 
@@ -30,8 +29,8 @@ void test(int t){
     int i, j, x, y;
     #pragma omp parallel private(x, y)
     for(i=0; i<t; i++){
-        x = Ran(BORD);
-        y = Ran(yBord);
+        x = rand()%(BORD+1);
+        y = rand()%(yBord+1);
         #pragma omp critical
         {
             if(y <= fun(x)) Ycon++;
@@ -62,7 +61,7 @@ int main(int argc, char **argv){
         for(i=0; i<NumPro; i++){
             sum += buf[i];
         } 
-        printf("the area of fun from [0,%d] is %.2f",BORD,(double)(sum)/(double)(all)*(double)(BORD*yBoard));
+        printf("the area of fun from [0,%d] is %.2f",BORD,(double)(sum)/(double)(all)*(double)(BORD*yBord));
     }
     else{
         test(all/NumPro);
