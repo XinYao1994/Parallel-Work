@@ -54,6 +54,7 @@ int main(int argc, char **argv){
     MPI_Comm_rank(MPI_COMM_WORLD,&Pid);
     MPI_Comm_size(MPI_COMM_WORLD,&nPNum);
     if(argc == 2) all = Myatoi(*(argv+1)) * CON;
+    else all = CON;
     //alloc a board
     int b = BORD + 1;
     chip = (int *)malloc(sizeof(int)*b*b);
