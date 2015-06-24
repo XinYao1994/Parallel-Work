@@ -54,8 +54,7 @@ int main(int argc, char **argv){
     if(Pid==0){
         test(all/NumPro);
         int i;
-        bufa[0] = Ycon;
-        bufb[0] = Fcon;
+        buf[0] = Ycon;
         for(i=1; i<NumPro; i++){
             MPI_Recv(buf+i, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
         }
