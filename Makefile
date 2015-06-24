@@ -21,5 +21,8 @@ cuda: cuda.cu
 	$(CUDACC) -o cuda cuda.cu -lcudart $(CFLAGS) -G
 	$(CUDACC) -run ./cuda
 
+mc: Monte-Carl.c
+	$(MPICC) -o mc Monte-Carl.c -fopenmp $(CFLAGS)
+
 clean:
 	-rm -f pthread openmp mpi cuda
