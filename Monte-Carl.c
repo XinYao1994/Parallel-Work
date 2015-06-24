@@ -35,7 +35,7 @@ void test(int t){
         y = Ran;
         #pragma omp critical
         {
-            *(chip + y*BORD + x) ++;
+            *(chip + y*BORD + x) = *(chip + y*BORD + x) + 1;
             if(y <= fun(x)) Ycon++;
         }
     }
