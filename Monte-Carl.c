@@ -27,19 +27,16 @@ int fun(int x){
     return x*x;
 }
 
-int test(int t){
+void test(int t){
     int i, j, x, y;
     #pragma omp parallel private(x, y)
     for(i=0; i<t; i++){
         x = Ran;
         y = Ran;
-        *(chip + y*BORD + x) ++;
-        
-        if(y <= fun(x)){
-            #pragma omp critical
-            {
-                Ycon++;
-            }
+        #pragma omp critical
+        {
+            *(chip + y*BORD + x) ++;
+            if(y <= fun(x)) Ycon++;
         }
     }
     #pragma omp parallel for reduction(+:Fcon)
@@ -58,7 +55,7 @@ int main(int argc, char **argv){
     MPI_Comm_size(MPI_COMM_WORLD,&nPNum);
     if(argc == 2) all = Myatoi(*(argv+1)) * CON;
     //alloc a board
-    int b = BORD + 1
+    int b = BORD + 1;
     chip = (int *)malloc(sizeof(int)*b*b);
     memset(chip, 0, sizeof(int)*b*b);
     Ycon = Fcon = 0;
@@ -68,8 +65,8 @@ int main(int argc, char **argv){
         bufa[0] = Ycon;
         bufb[0] = Fcon;
         for(i=1; i<NumPro; i++){
-            MPI_Recv(bufa+i, 1, MPI_INT, i, 0, MPI_COMM_WORLD, status);
-            MPI_Recv(bufb+i, 1, MPI_INT, i, 1, MPI_COMM_WORLD, status);
+            MPI_Recv(bufa+i, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
+            MPI_Recv(bufb+i, 1, MPI_INT, i, 1, MPI_COMM_WORLD, &status);
         }
         int sum = 0;
         all = 0;
@@ -88,6 +85,5 @@ int main(int argc, char **argv){
         return 0;
     }
     MPI_Finalize();
-    return 0;
     return 0;
 }
