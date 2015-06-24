@@ -26,14 +26,16 @@ int fun(int x){
 }
 
 void test(int t){
-    int i, j, x, y;
-    #pragma omp parallel private(x, y)
+    int i, x, y;
+    yBord = fun(BORD);
+    Ycon = 0;
+    #pragma omp parallel for
     for(i=0; i<t; i++){
         x = rand()%(BORD+1);
         y = rand()%(yBord+1);
-        #pragma omp critical
-        {
-            if(y <= fun(x)) Ycon++;
+        if(y <= fun(x)){
+            #pragma omp critical
+            Ycon = Ycon + 1;
         }
     }
 }
@@ -47,8 +49,6 @@ int main(int argc, char **argv){
     MPI_Comm_size(MPI_COMM_WORLD,&nPNum);
     if(argc == 2) all = Myatoi(*(argv+1)) * CON;
     else all = CON;
-    yBord = fun(BORD);
-    Ycon = 0;
     if(Pid==0){
         test(all/NumPro);
         int i;
@@ -57,11 +57,11 @@ int main(int argc, char **argv){
             MPI_Recv(buf+i, 1, MPI_INT, i, 0, MPI_COMM_WORLD, &status);
         }
         int sum = 0;
-        #pragma omp parallel for reduction(+:sum, all)
+        #pragma omp parallel for reduction(+:sum)
         for(i=0; i<NumPro; i++){
             sum += buf[i];
         } 
-        printf("the area of fun from [0,%d] is %.2f",BORD,(double)(sum)/(double)(all)*(double)(BORD*yBord));
+        printf("the area of fun from [0,%d] is %.2f\n",BORD,(double)(sum)/(double)(all)*(double)(BORD*yBord));
     }
     else{
         test(all/NumPro);
