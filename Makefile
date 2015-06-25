@@ -25,4 +25,4 @@ mc: Monte-Carl.c
 	$(MPICC) -o mc Monte-Carl.c -fopenmp $(CFLAGS)
 
 clean:
-	-rm -f pthread openmp mpi cuda
+	-rm -f pthread openmp mpi cuda mc
